@@ -2,10 +2,13 @@ import './App.css';
 import Footer from './Component/Footer';
 import Header from './Component/Header';
 import Navbar from './Component/Navbar';
+import store from './Component/redux/store';
 import TodoList from './Component/TodoList';
+import { Provider } from 'react-redux';
 
 function App() {
   return (
+    <Provider store={store}>
     <div className="App">
       <div className="grid place-items-center bg-blue-100 h-screen px-6 font-sans">
         <Navbar />
@@ -26,6 +29,7 @@ function App() {
         </div>
       </div>
     </div>
+    </Provider>
   );
 }
 
