@@ -1,15 +1,38 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { statusChanged } from './redux/filters/action'
+
+const numberOfTods = (no_of_todos) => {
+    switch (no_of_todos) {
+        case 0:
+            return 'No tasks'
+        case 1:
+            return '1 task'
+        default:
+            return `${no_of_todos} tasks`;
+    }
+}
 
 const Footer = () => {
-  return (
-    <div className="mt-4 flex justify-between text-xs text-gray-500">
-            <p>2 tasks left</p>
+    const todos = useSelector((state) => state.todos)
+    const filters = useSelector((state) => state.filters)
+    const dispatch = useDispatch()
+    const todoRemaining = todos.filter(todo => !todo.completed).length
+
+    const handleStatusChange = (status) => {
+        dispatch(statusChanged(status))
+
+    }
+    const { status, colors } = filters
+    return (
+        <div className="mt-4 flex justify-between text-xs text-gray-500">
+            <p>{numberOfTods(todoRemaining)} left</p>
             <ul className="flex space-x-1 items-center text-xs">
-                <li className="cursor-pointer font-bold">All</li>
+                <li className={`cursor-pointer ${status === "All" && "font-bold"}`} onClick={() => handleStatusChange('All')}>All</li>
                 <li>|</li>
-                <li className="cursor-pointer">Incomplete</li>
+                <li className={`cursor-pointer ${status === "Incomplete" && "font-bold"}`} onClick={() => handleStatusChange('Incomplete')}>Incomplete</li>
                 <li>|</li>
-                <li className="cursor-pointer">Complete</li>
+                <li className={`cursor-pointer ${status === "Complete" && "font-bold"}`} onClick={() => handleStatusChange('Complete')}>Complete</li>
                 <li></li>
                 <li></li>
                 <li
@@ -23,7 +46,7 @@ const Footer = () => {
                 ></li>
             </ul>
         </div>
-  )
+    )
 }
 
 export default Footer
